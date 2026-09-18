@@ -34,8 +34,14 @@ class CareerWorkspaceCliTests(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(
-                {item.name for item in target.iterdir()},
-                {"career-profile.md", "career-strategy.md", "plans", "reviews", "decisions"},
+                sorted(path.relative_to(target).as_posix() for path in target.rglob("*")),
+                [
+                    "career-profile.md",
+                    "career-strategy.md",
+                    "decisions",
+                    "plans",
+                    "reviews",
+                ],
             )
             self.assertTrue((target / "career-profile.md").is_file())
             self.assertTrue((target / "career-strategy.md").is_file())
