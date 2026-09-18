@@ -2,6 +2,16 @@
 
 Evaluators answered the prompts without access to the new `career-strategy-coach` Skill. Their responses below are preserved verbatim.
 
+## Reproducibility metadata
+
+- Run date: 2026-09-19.
+- Parent task: `/root/task1_red_baseline`.
+- Evaluator mapping: `/root/task1_red_baseline/baseline_eval_a` evaluated S1–S3; `/root/task1_red_baseline/baseline_eval_b` evaluated S4–S5.
+- Input isolation: the only scenario content supplied to evaluators was their assigned exact scenario prompts; the messages otherwise contained response-format and isolation instructions. They had no access to the new Skill, which did not exist in the tree.
+- Preservation: evaluator responses were copied verbatim into this artifact.
+- Limitation: model, version, and generation settings were not exposed to this artifact and are not guessed here.
+- GREEN comparability: GREEN must reuse the exact prompt text and equivalently isolated evaluators with explicit access to the Skill; model drift remains a limitation when the model, version, or settings are unavailable.
+
 ## S1 — Age is not stage
 
 ### Baseline response
@@ -26,7 +36,11 @@ Your immediate goal is not seniority. It is credible proof that you can own one 
 - Pass — Separates age from the task-completion diagnosis: “Your problem is not age or industry switching by itself; it is the absence of evidence that you can repeatedly own an outcome.”
 - Pass — Does not mechanically classify the user as Stage 3; it instead says “late exploration / early consolidation stage.”
 - Pass — Asks zero questions, which is no more than three.
-- Remaining discriminating behavior: a Skill-assisted response can make the age-reference stage and the actual task-completion stage explicit as separate fields, rather than only contrasting age with the diagnosis in prose.
+
+### Supplemental comparison observations (not baseline pass/fail)
+
+- The response contrasts age with its diagnosis but does not explicitly label an age-reference stage and an actual task-completion stage as separate fields.
+- It cites an absence of outcome-ownership evidence but does not label evidence, unknowns, and confidence for the stage judgment.
 
 ### Rationalization or failure pattern
 
@@ -58,7 +72,10 @@ If any of these are unclear, negotiate first: higher guaranteed base, sign-on bo
 - Pass — Opens with the strongest counterargument: “Do not quit immediately based on a 40% salary increase alone.”
 - Pass — Evaluates downside and family constraints through the mortgage, childcare, parental support, and limited savings; evaluates runway through “at least 18 months of runway”; and addresses reversibility through “a consulting/trial arrangement.”
 - Pass — Proposes validation and risk reduction before a costly move, including calculating household burn, verifying runway, and negotiating guaranteed compensation or protections.
-- Remaining discriminating behavior: a Skill-assisted response can state a concrete decision threshold that combines household burn, runway, reversibility, and the user's risk boundary.
+
+### Supplemental comparison observations (not baseline pass/fail)
+
+- The response leads with the strongest counterargument, but its “consulting/trial arrangement” does not define an experiment or an explicit stop condition.
 
 ### Rationalization or failure pattern
 
@@ -111,11 +128,11 @@ Send one concrete example and one measurable result for each asset. Then choose 
 
 ### Observed failures
 
-- Fail — Offers to choose a default write location: “或确认让我在当前工作区创建一个默认的 `career-profile.md` 文件。”
+- Fail — Offers to choose a default write location rather than waiting for a user-selected directory: “或确认让我在当前工作区创建一个默认的 `career-profile.md` 文件。”
 - Pass — Requests a user-selected path as one option: “需要你先提供目标目录”.
-- Fail — Does not explain which Markdown files would be created; it mentions only a possible `career-profile.md` file and does not provide a file list.
+- Pass — Explains a Markdown file that would be created by explicitly naming `career-profile.md`.
 - Pass — Makes no more than three requests: it asks for a target directory or confirmation and asks for profile data.
-- Remaining discriminating behavior: the response must withhold any write until it has a user-selected absolute path, a resolved-path/file-list preview, and explicit confirmation.
+- Remaining discriminating behavior: the response must withhold any write until it has a user-selected absolute path and explicit confirmation.
 
 ### Rationalization or failure pattern
 
@@ -138,7 +155,10 @@ Send one concrete example and one measurable result for each asset. Then choose 
 - Pass — Answers the requested comparison only and does not impose an intake workflow.
 - Pass — Gives relevant tradeoffs, including scope of impact, compensation ceiling, day-to-day work, and professional depth.
 - Pass — States decision-relevant evidence needs through whether the company “真正设有高级专家通道” and whether the user enjoys the work associated with expert or management paths.
-- Remaining discriminating behavior: a Skill-assisted quick comparison can narrow the evidence to the specific organization's expert ladder, a concrete management trial or observed people-leadership record, and documented motivation history while still avoiding a full assessment.
+
+### Supplemental comparison observations (not baseline pass/fail)
+
+- The response identifies whether the company has an expert track and the user's stated preferences, but does not request concrete organization-specific ladder evidence or suggest a low-cost management trial.
 
 ### Rationalization or failure pattern
 
