@@ -137,9 +137,9 @@ Send one concrete example and one measurable result for each asset. Then choose 
 
 - Pass — Answers the requested comparison only and does not impose an intake workflow.
 - Pass — Gives relevant tradeoffs, including scope of impact, compensation ceiling, day-to-day work, and professional depth.
-- Fail — Does not state the evidence needed to choose between the routes. It gives a “简化判断” based on preferences but requests no evidence about demonstrated people leadership, manager availability, expert-track ceiling, or desired work mix.
-- Remaining discriminating behavior: a Skill-assisted quick comparison can name a small set of decision-relevant evidence while still avoiding a full assessment.
+- Pass — States decision-relevant evidence needs through whether the company “真正设有高级专家通道” and whether the user enjoys the work associated with expert or management paths.
+- Remaining discriminating behavior: a Skill-assisted quick comparison can narrow the evidence to the specific organization's expert ladder, a concrete management trial or observed people-leadership record, and documented motivation history while still avoiding a full assessment.
 
 ### Rationalization or failure pattern
 
-- No explicit justification for omitting evidence needs was given. The response instead presents its decision rule as “简化判断”.
+- No acceptance-criterion failure was observed. The response distinguishes the routes rather than treating management as the automatic upgrade: “它是另一种职业，不是专家的自动升级。”
