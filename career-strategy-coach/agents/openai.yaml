@@ -1,0 +1,4 @@
+interface:
+  display_name: "职业战略教练"
+  short_description: "基于证据诊断职业阶段、资产、生态位与行动路线"
+  default_prompt: "使用 $career-strategy-coach 分析我的职业现状或决策；信息不足时每轮最多问三个问题。"
