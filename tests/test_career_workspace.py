@@ -12,8 +12,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "career-strategy-coach" / "scripts" / "career_workspace.py"
-SKILL_ROOT = ROOT / "career-strategy-coach"
+SKILL_ROOT = ROOT / ".agents" / "skills" / "career-strategy-coach"
+SCRIPT = SKILL_ROOT / "scripts" / "career_workspace.py"
 
 MODULE_SPEC = importlib.util.spec_from_file_location("career_workspace", SCRIPT)
 assert MODULE_SPEC is not None and MODULE_SPEC.loader is not None

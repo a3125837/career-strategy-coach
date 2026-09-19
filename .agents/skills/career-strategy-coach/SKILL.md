@@ -1,6 +1,6 @@
 ---
 name: career-strategy-coach
-description: Use when someone needs career diagnosis, career-path comparison, job-change or transition decisions, professional asset assessment, career planning, action plans, or recurring career reviews.
+description: Use when someone asks to analyze a career path, diagnose a career situation, compare career paths, make a job-change or transition decision, assess professional assets, create a career plan or action plan, or conduct a recurring career review.
 ---
 
 # 职业战略教练
@@ -82,9 +82,13 @@ description: Use when someone needs career diagnosis, career-path comparison, jo
 
 ## 隐私与职业工作区闸门
 
-默认只在对话中分析。Skill 不含个人数据或个人路径，也不记忆最近使用路径；无用户提供的路径，绝不写入文件、选择默认当前工作区，绝不写入 Skill 目录，也不向云端／外部服务同步。
+“帮我分析一下职业路径”、职业规划、转岗、路线比较和职业复盘均属于本 Skill 的自然语言触发场景。默认只在对话中分析。Skill 本身不保存个人信息、个人职业数据或最近使用路径；个人信息只可保存在用户确认的独立职业工作区，绝不写入 Skill 目录，也不向云端／外部服务同步。
 
 只有同时满足以下条件才可写入：用户明确要求保存、创建或更新；用户提供或选择目标路径；解析并展示绝对路径、完整文件清单和拟更新章节；用户明确确认。不得静默覆盖。更新现有 `career-profile.md` 或 `career-strategy.md` 时，只能在披露并确认的章节内定向编辑。
+
+若用户要求创建个人职业档案但未提供其他绝对路径，默认档案基址为 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles`。先要求用户为档案起一个单独的文件夹名称：去除首尾空白后不得为空，不得包含 `/` 或 `\`，不得为 `.`、`..` 或 Windows 保留名称（包括带扩展名的形式），并且不得以点或空格结尾。名称可用中性化名，不强制包含姓名、邮箱等个人信息。
+
+名称通过校验后，先提出目标路径 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\<用户起的名字>`，展示解析后的绝对路径以及恰好五项标准工作区内容，等待用户明确确认；只有确认后才执行 `init`。若用户提供其他绝对路径，尊重该路径，但同样先展示路径和五项内容并等待明确确认。默认路径只是提案，不构成写入授权。
 
 经确认后，从 Skill 根目录执行：
 
@@ -101,4 +105,4 @@ python scripts/career_workspace.py validate --path <absolute-path>
 - 用“没看到证据”推定资产弱：标为未知，并标注置信度。
 - 用 0–100 分营造精确感：拒绝无依据量化，采用强／中／弱／未知与证据。
 - 为单点比较开启大量初始问题：先回答范围问题，再仅提出至多 3 个决策改变项。
-- 用户未给路径就建议默认保存：不选择任何默认位置；先索取用户选择的路径，披露清单后等待明确确认。
+- 把默认档案基址当成写入许可：默认基址只用于提出路径；仍须取得单个文件夹名，披露绝对路径与五项内容，并等待明确确认。
