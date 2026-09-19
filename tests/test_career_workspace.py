@@ -43,7 +43,7 @@ class CareerWorkspaceCliTests(unittest.TestCase):
             target = root / "2026职业规划"
 
             result = run_cli(
-                "propose", "--root", str(root), "--name", "2026职业规划"
+                "propose", "--root", str(root), "--name", "  2026职业规划"
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -69,6 +69,13 @@ class CareerWorkspaceCliTests(unittest.TestCase):
             "..",
             "CON",
             "CON.txt",
+            "NUL",
+            "AUX.md",
+            "PRN.profile",
+            "COM1",
+            "COM9.txt",
+            "LPT1",
+            "LPT9.txt",
             "name.",
             "name ",
         )
@@ -85,6 +92,23 @@ class CareerWorkspaceCliTests(unittest.TestCase):
                     self.assertNotIn("invalid choice", result.stderr.lower())
                     self.assertTrue(result.stderr.strip())
                     self.assertFalse(root.exists())
+
+    def test_propose_rejects_relative_root_without_writing(self):
+        result = run_cli(
+            "propose", "--root", "relative-career-profiles", "--name", "alias"
+        )
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("absolute path", result.stderr.lower())
+        self.assertFalse((ROOT / "relative-career-profiles").exists())
+
+    def test_propose_rejects_a_target_overlapping_the_skill(self):
+        result = run_cli(
+            "propose", "--root", str(SKILL_ROOT.parent), "--name", SKILL_ROOT.name
+        )
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("outside the skill directory", result.stderr.lower())
 
     def test_init_creates_expected_workspace_structure(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:

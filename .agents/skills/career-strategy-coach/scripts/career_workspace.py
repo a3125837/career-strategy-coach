@@ -12,6 +12,14 @@ from typing import Sequence
 
 EXPECTED_FILES = ("career-profile.md", "career-strategy.md")
 EXPECTED_DIRS = ("plans", "reviews", "decisions")
+WINDOWS_RESERVED_NAMES = {
+    "CON",
+    "PRN",
+    "AUX",
+    "NUL",
+    *(f"COM{number}" for number in range(1, 10)),
+    *(f"LPT{number}" for number in range(1, 10)),
+}
 
 
 def resolve_absolute(raw_path: str | Path) -> Path:
@@ -39,6 +47,35 @@ def ensure_outside_skill(target: Path, skill_root: Path) -> None:
         canonical_skill_root, canonical_target
     ):
         raise ValueError("career workspace must be outside the Skill directory")
+
+
+def normalize_folder_name(raw_name: str) -> str:
+    """Return a safe, trimmed single-folder name."""
+    name = raw_name.strip()
+    if not name:
+        raise ValueError("career workspace name must not be empty")
+    if raw_name.endswith((".", " ")):
+        raise ValueError("career workspace name must not end with a dot or space")
+    if "/" in name or "\\" in name:
+        raise ValueError("career workspace name must be a single folder name")
+    if name in {".", ".."}:
+        raise ValueError("career workspace name must not be '.' or '..'")
+    device_name = name.partition(".")[0].upper()
+    if device_name in WINDOWS_RESERVED_NAMES:
+        raise ValueError("career workspace name is reserved by Windows")
+    return name
+
+
+def propose_workspace(root: Path, raw_name: str, skill_root: Path) -> int:
+    """Print the workspace that would be initialized without writing it."""
+    target = root / normalize_folder_name(raw_name)
+    ensure_outside_skill(target, skill_root)
+    print(f"proposed career workspace: {target}")
+    for filename in EXPECTED_FILES:
+        print(f"file: {target / filename}")
+    for directory in EXPECTED_DIRS:
+        print(f"directory: {target / directory}")
+    return 0
 
 
 def _target_exists(target: Path) -> bool:
@@ -184,15 +221,21 @@ def build_parser() -> argparse.ArgumentParser:
     for command in ("init", "validate"):
         command_parser = subparsers.add_parser(command)
         command_parser.add_argument("--path", required=True)
+    propose_parser = subparsers.add_parser("propose")
+    propose_parser.add_argument("--root", required=True)
+    propose_parser.add_argument("--name", required=True)
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        skill_root = Path(__file__).resolve().parents[1]
+        if args.command == "propose":
+            root = resolve_absolute(args.root)
+            return propose_workspace(root, args.name, skill_root)
         input_path = Path(args.path)
         target = resolve_absolute(input_path)
-        skill_root = Path(__file__).resolve().parents[1]
         if args.command == "init":
             return initialize_workspace(target, skill_root)
         lexical_path = Path(os.path.abspath(input_path))
