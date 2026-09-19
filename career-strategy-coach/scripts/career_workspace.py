@@ -16,7 +16,7 @@ EXPECTED_DIRS = ("plans", "reviews", "decisions")
 
 def resolve_absolute(raw_path: str | Path) -> Path:
     """Resolve a user-supplied path, requiring an absolute path first."""
-    path = Path(raw_path).expanduser()
+    path = Path(raw_path)
     if not path.is_absolute():
         raise ValueError("an absolute path is required")
     return path.resolve(strict=False)
@@ -190,7 +190,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        input_path = Path(args.path).expanduser()
+        input_path = Path(args.path)
         target = resolve_absolute(input_path)
         skill_root = Path(__file__).resolve().parents[1]
         if args.command == "init":

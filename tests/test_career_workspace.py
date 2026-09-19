@@ -21,9 +21,11 @@ career_workspace = importlib.util.module_from_spec(MODULE_SPEC)
 MODULE_SPEC.loader.exec_module(career_workspace)
 
 
-def run_cli(*args):
+def run_cli(*args, env_overrides=None):
     env = os.environ.copy()
     env["PYTHONDONTWRITEBYTECODE"] = "1"
+    if env_overrides:
+        env.update(env_overrides)
     return subprocess.run(
         [sys.executable, str(SCRIPT), *args],
         cwd=ROOT,
@@ -62,6 +64,29 @@ class CareerWorkspaceCliTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 2)
         self.assertIn("absolute path", result.stderr.lower())
+
+    def test_home_relative_path_is_rejected_without_creating_target(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            fake_home = Path(temp_dir)
+            home_env = {
+                "HOME": str(fake_home),
+                "USERPROFILE": str(fake_home),
+                "HOMEDRIVE": fake_home.drive,
+                "HOMEPATH": str(fake_home)[len(fake_home.drive) :],
+            }
+            for command in ("init", "validate"):
+                with self.subTest(command=command):
+                    target = fake_home / "career-audit-probe"
+                    result = run_cli(
+                        command,
+                        "--path",
+                        r"~\career-audit-probe",
+                        env_overrides=home_env,
+                    )
+
+                    self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                    self.assertIn("absolute path", result.stderr.lower())
+                    self.assertFalse(target.exists())
 
     def test_existing_target_is_rejected_without_removing_marker(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
