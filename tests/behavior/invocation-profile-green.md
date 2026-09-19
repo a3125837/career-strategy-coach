@@ -22,11 +22,9 @@
 
 ### 判定
 
-**PASS**
-
-- 只询问本次要解决的职业问题。
-- 回复中的例子用于界定问题类型，不构成追加数据收集或完整访谈。
-- 符合 `AGENTS.md` 对“只有别名本身”的路由要求。
+- **PASS — 项目规则明确把该文本路由到职业战略教练 Skill。** `AGENTS.md` 明确要求看到 `/ZhiYeJiaoLian` 时读取并遵循 `.agents/skills/career-strategy-coach/SKILL.md`。
+- **PASS — 明确说明它是项目级文本别名，而不是 Codex 原生斜杠命令。** `AGENTS.md` 与本文件的复现限制均明确记录该边界。
+- **PASS — 未附带职业问题时，只询问用户本次希望解决的职业问题。** 完整回复只有一个问题；其中的例子用于界定问题类型，不构成追加数据收集或完整访谈。
 
 ## 评估 2：自然语言触发职业路径分析
 
@@ -69,11 +67,9 @@
 
 ### 判定
 
-**PASS**
-
-- 未使用项目文本别名也能由“帮我分析一下职业路径”触发 Skill。
-- 先区分已知与未知，不补造职业事实，并按 Skill 的信息门控暂缓路线结论。
-- 恰好提出 3 个会实质改变结论的高价值问题，符合每轮最多 3 个问题的要求。
+- **PASS — 不要求用户先输入别名。** 本场景仅使用自然语言提示，完整回复已进入职业路径分析流程。
+- **PASS — Skill 的发现元数据或项目规则明确覆盖“分析职业路径”这一触发意图。** Skill frontmatter 的 `description` 与 `AGENTS.md` 均明确覆盖该意图，`tests/test_skill_discovery.py` 对发现位置和路由契约提供自动检查。
+- **PASS — 进入职业教练流程，而不是把个人信息写入 Skill。** 回复先区分已知与未知，不补造职业事实，并按信息门控暂缓路线结论；它恰好提出 3 个高价值问题，没有执行任何档案写入。
 
 ## 评估 3：创建档案但尚未提供名称
 
@@ -93,17 +89,18 @@
 
 ### 判定
 
-**PASS**
-
-- 用户明确说明尚未提供名称，因此第一阶段只询问一个单独的文件夹名称。
-- 没有提前假造目标路径，没有列出未经名称解析的写入提案，也没有执行任何写盘操作。
-- 名称规则与 Skill 的隐私及职业工作区闸门一致。
+- **PASS — 先要求用户提供一个单层档案文件夹名称。** 用户明确说明尚未提供名称，因此完整回复只询问一个名称，并给出与 Skill 一致的安全命名规则。
+- **PASS — 在写盘前提议默认绝对 `career-profiles/<name>` 路径。** 当前回复没有假造尚不存在的名称；名称产生后的路径解析由 `CareerWorkspaceCliTests.test_propose_returns_target_and_five_items_without_writing` 自动测试覆盖，默认基址与完整绝对路径格式同时由 `AGENTS.md` 和 Skill 静态契约规定。
+- **PASS — 写盘前展示且仅展示五个标准项。** `CareerWorkspaceCliTests.test_propose_returns_target_and_five_items_without_writing` 自动断言 `propose` 恰好输出 `career-profile.md`、`career-strategy.md`、`plans/`、`reviews/`、`decisions/`。
+- **PASS — `propose` 保持零写入。** 同一自动测试断言提案前后根目录均不存在；本次隔离评估也未运行 `propose` 或创建档案。
+- **PASS — 等待用户明确确认后才初始化，不把默认路径视作授权。** `AGENTS.md` 与 Skill 静态契约均明确要求展示绝对路径和五项内容、等待明确确认，且只有确认后才执行 `init`；这不是本场景中实际执行过的初始化。
+- **PASS — `career-profiles/` 不进入 Git。** `.gitignore` 明确包含 `career-profiles/`，并由 `SkillDiscoveryTests.test_private_profiles_are_gitignored` 自动检查。
 
 ## 后续阶段的自动测试覆盖
 
-本轮三个 Prompt 均不满足写入前置条件，因此没有实际运行 `propose` 或 `init`。后续阶段由自动测试保证：
+本轮三个 Prompt 均不满足写入前置条件，因此没有实际运行 `propose` 或 `init`。以下结论记录的是自动测试或静态契约覆盖，不是实际创建声明：
 
-1. 收到合法名称后，`propose` 输出默认绝对路径 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\<name>`；
-2. `propose` 输出恰好五项标准内容：`career-profile.md`、`career-strategy.md`、`plans/`、`reviews/`、`decisions/`；
-3. `propose` 为只读操作，目标工作区保持零写入；
-4. 只有用户看到绝对路径与五项内容并明确确认后，才允许执行 `init`。
+1. **PASS — 默认绝对路径。** `CareerWorkspaceCliTests.test_propose_returns_target_and_five_items_without_writing` 覆盖合法名称的路径解析；`AGENTS.md` 与 Skill 将默认目标规定为 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\<name>`。
+2. **PASS — 恰好五项。** 同一自动测试断言输出恰好包含 `career-profile.md`、`career-strategy.md`、`plans/`、`reviews/`、`decisions/`。
+3. **PASS — 零写入。** 同一自动测试断言 `propose` 后根目录仍不存在。
+4. **PASS — 明确确认后才 `init`。** `AGENTS.md` 与 Skill 的静态契约明确要求先展示路径和五项内容，等待用户确认后才执行 `init`；本次没有执行 `init`。
