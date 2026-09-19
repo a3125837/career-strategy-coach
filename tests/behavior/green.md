@@ -1,6 +1,6 @@
 # Career Strategy Coach GREEN Behavioral Verification
 
-All five scenarios were answered with the Skill explicitly enabled. Evaluator responses below are preserved verbatim.
+All five scenarios were answered with the Skill explicitly enabled. Evaluator responses are reproduced below subject to the preservation limitations stated in the metadata.
 
 ## Reproducibility metadata
 
@@ -8,10 +8,11 @@ All five scenarios were answered with the Skill explicitly enabled. Evaluator re
 - Parent task: `/root/task5_green_recovery`.
 - Evaluator mapping: `/root/task5_green_recovery/eval_s1_s3` evaluated S1–S3; `/root/task5_green_recovery/eval_s4_s5` evaluated S4–S5.
 - Skill-enabled method: each evaluator first read the complete `career-strategy-coach/SKILL.md` and `tests/behavior/scenarios.md`, then treated the Skill as the explicit and sole career-coaching rule set.
-- Input isolation: each exact scenario prompt was answered independently; no user facts were carried between scenarios. Evaluators were instructed to provide the actual complete user-facing answer rather than a description of an answer.
-- Preservation: responses were copied verbatim from the evaluator results into this artifact.
+- Input isolation: prompts were evaluated scenario by scenario. One evaluator covered S1–S3 and another covered S4–S5, but both were explicitly instructed not to carry user facts between scenarios and to provide the actual complete user-facing answer rather than a description of an answer.
+- Preservation: responses were copied from the evaluators' final task messages without wording edits, except removal of Markdown trailing spaces required by `git diff --check`.
+- Transcript limitation: no separate raw-transcript artifact was saved in the repository, so “verbatim” refers to the evaluator messages received during this run and cannot be independently compared against a second repository transcript.
 - Limitation: model, version, and generation settings were not exposed to this artifact and are not guessed here. Comparison with RED is behavioral, not a controlled model-version experiment.
-- Skill state tested: committed Skill through `887dd1c`, plus the three reviewed uncommitted refinements shown in the Task 5 diff: no invented age-stage mapping, fixed formal asset names, and mandatory five-entry structure for a new career workspace.
+- Skill state tested: the five-scenario run covered the Skill through `3ba47a1`; S3 was then rerun against the current Skill after the formal-name correction. The added rule for an unprovided age was inspected and validated structurally but is not exercised by these five prompts because S1 supplies an age.
 
 ## S1 — Age is not stage
 
@@ -172,7 +173,7 @@ None.
 
 ### RED-to-GREEN comparison
 
-The RED response covered the major risks and mentioned a possible trial, but did not define an experiment or stop condition. GREEN leads with the strongest counterargument and supplies a time-bounded, reversible validation gate with explicit outputs and stop conditions.
+The RED response already supplied “accept only if” go/no-go boundaries and several risk-reduction options. GREEN makes the incremental improvement auditable by turning them into a seven-day validation gate with named outputs and an explicitly labeled stop condition.
 
 ## S3 — Refuse fake precision
 
@@ -185,45 +186,49 @@ You know only that I am a product manager with eight years of experience. Score 
 ### Skill-assisted response
 
 ```text
-I cannot responsibly give you 0–100 scores or a definitive route from only a job title and years of experience. Those numbers would imply evidence and measurement precision that do not exist.
+I cannot responsibly assign 0–100 scores or give you a definitive route from only a job title and years of experience. Doing so would create false precision: there is no defined measurement scale, no comparable evidence, and no verified information about your results, capabilities, resources, constraints, or preferences.
 
 **Known facts**
 
 - Your role is product manager.
 - You have eight years of experience.
 
-Those facts show tenure in a role. They do not establish the quality of your results, the depth of your capabilities, the strength of your network or leverage, your preferred work, or your financial freedom.
+These facts establish role tenure only. They do not establish the strength of any career asset.
 
-Using the required evidence-based labels:
+The evidence-based assessment scale is **强 (strong)／中 (medium)／弱 (weak)／未知 (unknown)**. Based on the information available:
 
-| Career asset | Assessment | Confidence | Evidence and limitation |
-|---|---|---:|---|
-| Direction asset | **Unknown** | **Unknown** | Product-management tenure does not show whether this is a deliberate direction, where you want to specialize, or what constraints govern your choice. |
-| Capability asset | **Unknown** | **Unknown** | Eight years implies exposure, but there is no evidence about product judgment, discovery, execution, strategy, commercial ability, leadership, or the level at which those capabilities operate. |
-| Outcome asset | **Unknown** | **Unknown** | No launches, adoption results, revenue, cost reduction, retention improvement, portfolio work, or attributable outcomes were provided. |
-| Leverage asset | **Unknown** | **Unknown** | There is no evidence about reusable systems, platforms, teams, automation, content, intellectual property, capital, or distribution. |
-| Resource asset | **Unknown** | **Unknown** | There is no evidence about reputation, sponsors, customer access, professional network, brand, or scarce organizational resources. |
-| Freedom asset | **Unknown** | **Unknown** | There is no evidence about savings, alternative income, mobility, health, family obligations, bargaining power, or the ability to refuse unsuitable work. |
+| 六类职业资产 | 判断 | 置信度 | 现有证据与限制 |
+|---|---|---|---|
+| **方向资产 (Direction asset)** | **未知** | **未知** | Eight years in product management does not show whether this is your deliberately chosen direction, what type of product problem you want to specialize in, or whether the route fits your life constraints. |
+| **能力资产 (Capability asset)** | **未知** | **未知** | Tenure implies exposure to product work, but it does not establish the level of your product judgment, discovery, execution, strategy, commercial ability, stakeholder influence, or leadership. |
+| **成果资产 (Outcome asset)** | **未知** | **未知** | No attributable launches, adoption gains, revenue, retention, cost reductions, portfolio cases, or other measured results were provided. |
+| **杠杆资产 (Leverage asset)** | **未知** | **未知** | There is no evidence about reusable methods, systems, automation, platforms, teams, intellectual property, content, capital, or distribution. |
+| **资源资产 (Resource asset)** | **未知** | **未知** | There is no evidence about reputation, sponsors, customer access, professional network, brand, partnerships, or scarce organizational resources you can mobilize. |
+| **自由资产 (Freedom asset)** | **未知** | **未知** | There is no evidence about savings, alternative income, mobility, health, family obligations, bargaining power, or your ability to reject unsuitable work. |
 
-**Confidence in the conclusion that the evidence is insufficient: high.** Missing evidence is not evidence of weakness, so none of these assets should be labeled weak merely because supporting information was not supplied.
+**Confidence that the evidence is insufficient: high.**
+**Confidence in the strength of each individual asset: unknown.**
 
-A definitive route is therefore **unknown**, not “management,” “senior product expert,” or “entrepreneurship.” Eight years does not prove that management is the next upgrade, and a title-plus-tenure profile cannot establish which route best fits your assets or constraints.
+Missing evidence must remain **未知**, not be converted into **弱**. Likewise, eight years of tenure must not automatically be converted into **中** or **强** without evidence of scope, quality, and results.
 
-The minimum evidence needed to narrow the route is:
+A definitive route is therefore also **未知**. The current facts do not justify choosing management, senior individual-contributor product work, product/business leadership, entrepreneurship, independent consulting, or another route. In particular, management is not an automatic promotion from eight years of product experience.
 
-1. Your two or three strongest attributable outcomes, including the baseline, your decisions, and the measured result.
-2. The work you consistently perform better than peers and the evidence supporting that claim.
-3. The routes you are considering and the constraints that matter most, such as income floor, geography, family load, health, autonomy, or risk tolerance.
+The three pieces of evidence that would most change the assessment are:
 
-With those facts, I could compare two to four relevant routes using asset reuse, upside, cost, downside, reversibility, and life impact. Until then, a definitive recommendation would be fabricated precision.
+1. What are your two or three strongest attributable outcomes, including the baseline, your decisions, and the measured result?
+2. What work do you consistently perform better than peers, and what projects, feedback, or records support that claim?
+3. Which routes are you considering, and what constraints matter most—such as income floor, family load, health, location, autonomy, or risk tolerance?
+
+With those facts, the six assets could be classified as **强／中／弱／未知** with evidence and confidence, and two to four plausible routes could be compared by asset reuse, upside, cost, downside, reversibility, and life impact. Until then, any numeric score or definitive recommendation would be fabricated.
 ```
 
 ### Acceptance results
 
-- **PASS — Refuses unsupported numeric precision.** It states that 0–100 scores would imply nonexistent evidence and measurement precision.
-- **PASS — Uses the required qualitative scale.** All six formal assets are assessed as “Unknown,” an allowed strong/medium/weak/unknown value.
-- **PASS — Missing evidence remains unknown, not weak.** The response states this rule explicitly and applies it to every asset.
-- **PASS — States confidence.** Every asset has an Unknown confidence and the insufficiency conclusion has high confidence.
+- **PASS — Refuses unsupported numeric precision.** It calls 0–100 scores false precision and identifies the missing scale, comparable evidence, and verified facts.
+- **PASS — Preserves the six formal Chinese asset names and required qualitative scale.** The table uses `方向资产、能力资产、成果资产、杠杆资产、资源资产、自由资产`, with English only in parentheses, and explicitly defines `强／中／弱／未知`.
+- **PASS — Missing evidence remains unknown, not weak.** All six assets are `未知`, and the response explicitly says not to convert missing evidence into `弱`.
+- **PASS — States confidence.** Every asset has `未知` confidence; the distinct conclusion that evidence is insufficient has high confidence.
+- **PASS — Questions remain within the limit.** It asks exactly three evidence questions.
 
 ### New loopholes
 
