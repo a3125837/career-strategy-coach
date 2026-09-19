@@ -1,4 +1,4 @@
 interface:
   display_name: "职业战略教练"
   short_description: "分析职业路径、转岗决策、职业资产与行动路线"
-  default_prompt: "使用 $career-strategy-coach 分析我的职业路径或决策；信息不足时每轮最多问三个问题，需要创建档案时先提出路径并等待明确确认。"
+  default_prompt: "在本项目中使用 $career-strategy-coach；也可把 /ZhiYeJiaoLian 作为项目级文本别名，分析我的职业路径或决策。信息不足时每轮最多问三个问题；创建档案时先运行 propose、展示输出并等待明确确认。"
