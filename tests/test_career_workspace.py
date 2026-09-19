@@ -97,6 +97,42 @@ class CareerWorkspaceCliTests(unittest.TestCase):
                     self.assertTrue(result.stderr.strip())
                     self.assertFalse(root.exists())
 
+    def test_propose_rejects_windows_invalid_characters_and_controls(self):
+        invalid_names = (
+            "C:",
+            "C:foo",
+            "a:b",
+            *(f"left{character}right" for character in '<>:"/\\|?*'),
+            *(f"left{chr(codepoint)}right" for codepoint in range(0x20)),
+        )
+
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            root = Path(temp_dir) / "career-profiles"
+            for name in invalid_names:
+                with self.subTest(name=repr(name)):
+                    output = io.StringIO()
+                    error = io.StringIO()
+                    with contextlib.redirect_stdout(output), contextlib.redirect_stderr(
+                        error
+                    ):
+                        result = career_workspace.main(
+                            ["propose", "--root", str(root), "--name", name]
+                        )
+
+                    self.assertEqual(result, 2)
+                    self.assertEqual(output.getvalue(), "")
+                    self.assertTrue(error.getvalue().strip())
+                    self.assertNotIn("invalid choice", error.getvalue().lower())
+                    self.assertFalse(root.exists())
+
+    def test_direct_child_guard_rejects_non_child_and_relative_targets(self):
+        root = ROOT.resolve()
+        career_workspace.ensure_direct_child(root / "profile", root)
+        for target in (root / "nested" / "deeper" / "profile", Path("profile")):
+            with self.subTest(target=target):
+                with self.assertRaises(ValueError):
+                    career_workspace.ensure_direct_child(target, root)
+
     def test_propose_rejects_relative_root_without_writing(self):
         result = run_cli(
             "propose", "--root", "relative-career-profiles", "--name", "alias"

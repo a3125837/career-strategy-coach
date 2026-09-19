@@ -20,6 +20,7 @@ WINDOWS_RESERVED_NAMES = {
     *(f"COM{number}" for number in range(1, 10)),
     *(f"LPT{number}" for number in range(1, 10)),
 }
+WINDOWS_INVALID_FILENAME_CHARS = frozenset('<>:"/\\|?*')
 
 
 def resolve_absolute(raw_path: str | Path) -> Path:
@@ -58,8 +59,11 @@ def normalize_folder_name(raw_name: str) -> str:
         raise ValueError(
             "career workspace name must not end with a dot or trailing whitespace"
         )
-    if "/" in name or "\\" in name:
-        raise ValueError("career workspace name must be a single folder name")
+    if any(
+        character in WINDOWS_INVALID_FILENAME_CHARS or ord(character) < 0x20
+        for character in name
+    ):
+        raise ValueError("career workspace name contains a Windows-invalid character")
     if name in {".", ".."}:
         raise ValueError("career workspace name must not be '.' or '..'")
     device_name = name.partition(".")[0].upper()
@@ -68,9 +72,19 @@ def normalize_folder_name(raw_name: str) -> str:
     return name
 
 
+def ensure_direct_child(target: Path, root: Path) -> None:
+    """Reject a proposed target unless it is one direct child of the root."""
+    if not target.is_absolute() or not root.is_absolute() or target.parent != root:
+        raise ValueError("career workspace target must be a direct child of its root")
+
+
 def propose_workspace(root: Path, raw_name: str, skill_root: Path) -> int:
     """Print the workspace that would be initialized without writing it."""
-    target = root / normalize_folder_name(raw_name)
+    if not root.is_absolute():
+        raise ValueError("an absolute path is required")
+    canonical_root = root.resolve(strict=False)
+    target = (canonical_root / normalize_folder_name(raw_name)).resolve(strict=False)
+    ensure_direct_child(target, canonical_root)
     ensure_outside_skill(target, skill_root)
     print(f"proposed career workspace: {target}")
     for filename in EXPECTED_FILES:
