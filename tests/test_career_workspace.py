@@ -76,6 +76,18 @@ class CareerWorkspaceCliTests(unittest.TestCase):
             "COM9.txt",
             "LPT1",
             "LPT9.txt",
+            "COM¹",
+            "COM².txt",
+            "COM³",
+            "COM¹.txt",
+            "COM²",
+            "COM³.txt",
+            "LPT¹",
+            "LPT².txt",
+            "LPT³",
+            "LPT¹.txt",
+            "LPT²",
+            "LPT³.txt",
             "name.",
             "name ",
             "name.\t",
@@ -124,6 +136,15 @@ class CareerWorkspaceCliTests(unittest.TestCase):
                     self.assertTrue(error.getvalue().strip())
                     self.assertNotIn("invalid choice", error.getvalue().lower())
                     self.assertFalse(root.exists())
+
+    def test_name_validation_rejects_superscript_windows_device_names(self):
+        for prefix in ("COM", "LPT"):
+            for digit in ("¹", "²", "³"):
+                for suffix in ("", ".txt"):
+                    name = f"{prefix}{digit}{suffix}"
+                    with self.subTest(name=name):
+                        with self.assertRaises(ValueError):
+                            career_workspace.normalize_folder_name(name)
 
     def test_direct_child_guard_rejects_non_child_and_relative_targets(self):
         root = ROOT.resolve()
