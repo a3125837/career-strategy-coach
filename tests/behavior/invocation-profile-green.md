@@ -96,6 +96,39 @@
 - **PASS — 等待用户明确确认后才初始化，不把默认路径视作授权。** `AGENTS.md` 与 Skill 静态契约均明确要求展示绝对路径和五项内容、等待明确确认，且只有确认后才执行 `init`；这不是本场景中实际执行过的初始化。
 - **PASS — `career-profiles/` 不进入 Git。** `.gitignore` 明确包含 `career-profiles/`，并由 `SkillDiscoveryTests.test_private_profiles_are_gitignored` 自动检查。
 
+## 评估 4：已提供合法档案名后的下一轮
+
+本场景承接评估 3。用户已经提供合法的单层文件夹名称；这仍是基于仓库规则与 Skill 的隔离行为评估，不是 Codex 客户端原生 slash 集成测试。
+
+### Prompt（逐字）
+
+```text
+职业档案-A
+```
+
+### 独立只读评估代理完整回复（逐字）
+
+档案名称已通过校验。只读提案如下：
+
+```text
+proposed career workspace: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A
+file: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A\career-profile.md
+file: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A\career-strategy.md
+directory: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A\plans
+directory: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A\reviews
+directory: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A\decisions
+```
+
+目前尚未创建任何文件或目录。若你确认按以上绝对路径初始化这五项内容，请明确回复“确认创建”。
+
+### 判定
+
+- **PASS — 确实运行并依赖只读 `propose`。** 使用 `career_workspace.py propose --root "F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles" --name "职业档案-A"` 复现了回复中的完整提案输出；命令前后目标路径均不存在。
+- **PASS — 默认绝对路径正确。** 提案目标为 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A`，与 `AGENTS.md` 和 Skill 的默认路径契约一致。
+- **PASS — 恰好展示五项标准内容。** 回复只列出两个文件和三个目录：`career-profile.md`、`career-strategy.md`、`plans/`、`reviews/`、`decisions/`。
+- **PASS — 明确说明尚未写盘。** 回复逐字说明“目前尚未创建任何文件或目录”，实际只读命令前后的目标路径检查也均为不存在。
+- **PASS — 只等待明确确认且没有执行 `init`。** 回复要求用户明确回复“确认创建”，本场景没有调用 `init`，也没有创建目标工作区。
+
 ## 后续阶段的自动测试覆盖
 
 本轮三个 Prompt 均不满足写入前置条件，因此没有实际运行 `propose` 或 `init`。以下结论记录的是自动测试或静态契约覆盖，不是实际创建声明：
