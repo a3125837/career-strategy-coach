@@ -78,6 +78,10 @@ class CareerWorkspaceCliTests(unittest.TestCase):
             "LPT9.txt",
             "name.",
             "name ",
+            "name.\t",
+            "name.\n",
+            "name \t",
+            "name \n",
         )
 
         with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:

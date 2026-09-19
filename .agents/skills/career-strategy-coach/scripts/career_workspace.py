@@ -54,8 +54,10 @@ def normalize_folder_name(raw_name: str) -> str:
     name = raw_name.strip()
     if not name:
         raise ValueError("career workspace name must not be empty")
-    if raw_name.endswith((".", " ")):
-        raise ValueError("career workspace name must not end with a dot or space")
+    if name.endswith(".") or raw_name != raw_name.rstrip():
+        raise ValueError(
+            "career workspace name must not end with a dot or trailing whitespace"
+        )
     if "/" in name or "\\" in name:
         raise ValueError("career workspace name must be a single folder name")
     if name in {".", ".."}:
