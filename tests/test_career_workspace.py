@@ -37,6 +37,55 @@ def run_cli(*args, env_overrides=None):
 
 
 class CareerWorkspaceCliTests(unittest.TestCase):
+    def test_propose_returns_target_and_five_items_without_writing(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            root = Path(temp_dir) / "career-profiles"
+            target = root / "2026职业规划"
+
+            result = run_cli(
+                "propose", "--root", str(root), "--name", "2026职业规划"
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(
+                result.stdout.splitlines(),
+                [
+                    f"proposed career workspace: {target}",
+                    f"file: {target / 'career-profile.md'}",
+                    f"file: {target / 'career-strategy.md'}",
+                    f"directory: {target / 'plans'}",
+                    f"directory: {target / 'reviews'}",
+                    f"directory: {target / 'decisions'}",
+                ],
+            )
+            self.assertFalse(root.exists())
+
+    def test_propose_rejects_unsafe_single_folder_names(self):
+        unsafe_names = (
+            "",
+            "a/b",
+            r"a\b",
+            ".",
+            "..",
+            "CON",
+            "CON.txt",
+            "name.",
+            "name ",
+        )
+
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            root = Path(temp_dir) / "career-profiles"
+            for name in unsafe_names:
+                with self.subTest(name=name):
+                    result = run_cli(
+                        "propose", "--root", str(root), "--name", name
+                    )
+
+                    self.assertEqual(result.returncode, 2)
+                    self.assertNotIn("invalid choice", result.stderr.lower())
+                    self.assertTrue(result.stderr.strip())
+                    self.assertFalse(root.exists())
+
     def test_init_creates_expected_workspace_structure(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
             target = Path(temp_dir) / "new-workspace"
