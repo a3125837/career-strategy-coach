@@ -2,7 +2,7 @@
 
 ## 评估边界与复现限制
 
-本文件记录三个相互独立、只读的隔离评估。评估上下文仅由本仓库根目录 `AGENTS.md` 与 `.agents/skills/career-strategy-coach/SKILL.md` 组成，不读取或写入个人职业档案，也不执行工作区初始化。
+本文件记录三个原始验收 Prompt 的相互独立、只读隔离评估，以及一个承接“创建档案”对话的合法名称场景。评估上下文仅由本仓库根目录 `AGENTS.md` 与 `.agents/skills/career-strategy-coach/SKILL.md` 组成，不读取或写入个人职业档案，也不执行工作区初始化。
 
 这不是 Codex 客户端原生自定义 slash 集成测试。`/ZhiYeJiaoLian` 是本项目 `AGENTS.md` 定义的项目级文本约定，不是 Codex 原生自定义裸斜杠命令。因此，本证据只能复现仓库规则与 Skill 在隔离模拟中的预期行为，不能证明客户端已注册原生 `/ZhiYeJiaoLian` 命令。
 
@@ -131,7 +131,7 @@ directory: F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\�
 
 ## 后续阶段的自动测试覆盖
 
-本轮三个 Prompt 均不满足写入前置条件，因此没有实际运行 `propose` 或 `init`。以下结论记录的是自动测试或静态契约覆盖，不是实际创建声明：
+前三个原始验收 Prompt 均不满足写入前置条件，因此没有实际运行 `propose` 或 `init`。第四个承接场景实际运行了零写入的只读 `propose`，但没有运行 `init`。以下结论记录的是自动测试、第四场景的只读提案或静态契约覆盖，不是实际创建声明：
 
 1. **PASS — 默认绝对路径。** `CareerWorkspaceCliTests.test_propose_returns_target_and_five_items_without_writing` 覆盖合法名称的路径解析；`AGENTS.md` 与 Skill 将默认目标规定为 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\<name>`。
 2. **PASS — 恰好五项。** 同一自动测试断言输出恰好包含 `career-profile.md`、`career-strategy.md`、`plans/`、`reviews/`、`decisions/`。
