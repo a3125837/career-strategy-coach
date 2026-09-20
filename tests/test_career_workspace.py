@@ -193,6 +193,64 @@ class CareerWorkspaceCliTests(unittest.TestCase):
             self.assertTrue((target / "reviews").is_dir())
             self.assertTrue((target / "decisions").is_dir())
 
+    def test_init_rejects_dangling_link_in_lexical_path_when_supported(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            temp_root = Path(temp_dir)
+            missing_destination = temp_root / "missing-destination"
+            dangling_link = temp_root / "dangling-link"
+            try:
+                os.symlink(
+                    missing_destination,
+                    dangling_link,
+                    target_is_directory=True,
+                )
+            except (OSError, NotImplementedError):
+                self.skipTest("directory symlinks are unavailable")
+
+            lexical_target = dangling_link / "career-workspace"
+            result = run_cli("init", "--path", str(lexical_target))
+
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertIn("linked", result.stderr.lower())
+            self.assertFalse(missing_destination.exists())
+            self.assertFalse(lexical_target.exists())
+
+    def test_path_chain_guard_inspects_nonexistent_lexical_entry_and_ancestors(self):
+        lexical_target = ROOT / "dangling-link" / "career-workspace"
+        dangling_link = lexical_target.parent
+        inspected = []
+
+        def mark_dangling_link(path):
+            inspected.append(path)
+            return path == dangling_link
+
+        with mock.patch.object(
+            career_workspace,
+            "_is_link_or_reparse",
+            side_effect=mark_dangling_link,
+        ):
+            self.assertTrue(career_workspace._path_has_link_or_reparse(lexical_target))
+
+        self.assertEqual(inspected[:2], [lexical_target, dangling_link])
+
+    def test_init_checks_lexical_path_chain_before_writing(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            target = Path(temp_dir) / "blocked-workspace"
+            with mock.patch.object(
+                career_workspace,
+                "_path_has_link_or_reparse",
+                return_value=True,
+            ) as path_guard:
+                with contextlib.redirect_stderr(io.StringIO()) as error:
+                    result = career_workspace.main(
+                        ["init", "--path", str(target)]
+                    )
+
+            self.assertEqual(result, 2)
+            self.assertEqual(path_guard.call_args.args[0], target)
+            self.assertIn("linked", error.getvalue().lower())
+            self.assertFalse(target.exists())
+
     def test_relative_path_is_rejected(self):
         result = run_cli("init", "--path", "relative-target")
 

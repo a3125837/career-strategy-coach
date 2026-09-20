@@ -145,7 +145,13 @@ def _report_initialization_failure(
     print(message, file=sys.stderr)
 
 
-def initialize_workspace(target: Path, skill_root: Path) -> int:
+def initialize_workspace(
+    target: Path, skill_root: Path, input_path: Path | None = None
+) -> int:
+    workspace_path = input_path or target
+    if _path_has_link_or_reparse(workspace_path):
+        print(f"linked or reparse workspace path: {workspace_path}", file=sys.stderr)
+        return 2
     ensure_outside_skill(target, skill_root)
     if _target_exists(target):
         print(f"target already exists: {target}", file=sys.stderr)
@@ -252,10 +258,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             root = resolve_absolute(args.root)
             return propose_workspace(root, args.name, skill_root)
         input_path = Path(args.path)
+        lexical_path = Path(os.path.abspath(input_path))
         target = resolve_absolute(input_path)
         if args.command == "init":
-            return initialize_workspace(target, skill_root)
-        lexical_path = Path(os.path.abspath(input_path))
+            return initialize_workspace(target, skill_root, lexical_path)
         return validate_workspace(target, skill_root, lexical_path)
     except KeyboardInterrupt as exc:
         _report_initialization_failure(exc)
