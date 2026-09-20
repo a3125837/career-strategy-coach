@@ -27,7 +27,7 @@
 F 盘安装副本继续保留在：
 
 ```text
-F:\AIPro\Codex\skills\career-strategy-coach
+你的skill所在位置
 ```
 
 项目源码是唯一权威源。每次修改后，只有在确认安装副本未被用户修改时才能同步，并在同步后比较完整相对路径集合与 SHA-256。
@@ -53,7 +53,7 @@ career-profiles/
 用户必须提供一个单层文件夹名称。最终路径为：
 
 ```text
-F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\<用户起的名字>
+你的skill所在位置\career-profiles\<用户起的名字>
 ```
 
 名称规则：

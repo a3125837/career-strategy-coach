@@ -500,7 +500,7 @@ Run:
 
 ```powershell
 $env:PYTHONDONTWRITEBYTECODE='1'
-& 'C:\Users\45458\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' 'C:\Users\45458\.codex\skills\.system\skill-creator\scripts\quick_validate.py' 'F:\AIPro\Career Strategy Coach  职业战略教练\.worktrees\career-strategy-coach-v1\career-strategy-coach'
+& 'C:\Users\45458\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' 'C:\Users\45458\.codex\skills\.system\skill-creator\scripts\quick_validate.py' '你的skill所在位置\.worktrees\career-strategy-coach-v1\career-strategy-coach'
 ```
 
 Expected: validator exits 0 and reports the Skill is valid.
@@ -576,7 +576,7 @@ git commit -m "test: verify career coach behavior"
 
 **Files:**
 - Source: `career-strategy-coach/`
-- Create: `F:\AIPro\Codex\skills\career-strategy-coach\`
+- Create: `你的skill所在位置\`
 
 - [ ] **Step 1: Verify the install target is outside the source and on F**
 
@@ -584,7 +584,7 @@ Resolve both absolute paths. Require both drive letters to be `F:` and reject eq
 
 - [ ] **Step 2: Create a fresh physical copy**
 
-If the install target already exists, stop and report the conflict. Otherwise copy the complete `career-strategy-coach` directory to `F:\AIPro\Codex\skills\career-strategy-coach` using native PowerShell file operations. Do not create a junction, symbolic link, or C-drive entry.
+If the install target already exists, stop and report the conflict. Otherwise copy the complete `career-strategy-coach` directory to `你的skill所在位置` using native PowerShell file operations. Do not create a junction, symbolic link, or C-drive entry.
 
 - [ ] **Step 3: Validate the installed copy**
 

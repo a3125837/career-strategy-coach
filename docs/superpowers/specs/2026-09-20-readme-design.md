@@ -29,7 +29,7 @@ README 按用户完成任务的顺序组织：
 - `/ZhiYeJiaoLian` 是本仓库 `AGENTS.md` 定义的项目级文本别名，不得写成 Codex 原生自定义斜杠命令。
 - 也可以通过“帮我分析一下职业路径”等自然语言触发 Skill。
 - Skill 不保存个人信息；个人职业信息只保存在用户确认的独立职业档案目录。
-- 默认档案根目录为 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles`，但默认路径不代表写入授权。
+- 默认档案根目录为 `你的skill所在位置\career-profiles`，但默认路径不代表写入授权。
 - 合法名称必须先交给只读 `propose`，展示绝对路径和恰好五项内容；用户明确确认后才能执行 `init`。
 - `career-profiles/` 被 Git 忽略。
 - 测试状态写为 33 项通过、4 项因当前 Windows 符号链接权限不可用而跳过；不得把跳过写成失败或完整覆盖。

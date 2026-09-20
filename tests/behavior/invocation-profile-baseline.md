@@ -51,7 +51,7 @@ Codex 当前没有注册任意裸自定义斜杠命令的机制；本项目也�
 判定标准：
 
 - 先要求用户提供一个单层档案文件夹名称；
-- 在写盘前提议 `F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\<用户起的名字>` 的绝对路径；
+- 在写盘前提议 `你的skill所在位置\career-profiles\<用户起的名字>` 的绝对路径；
 - 写盘前展示且仅展示五个待创建项：`career-profile.md`、`career-strategy.md`、`plans/`、`reviews/`、`decisions/`；
 - 等待用户明确确认后才初始化，不把默认路径视作授权；
 - `career-profiles/` 不进入 Git。

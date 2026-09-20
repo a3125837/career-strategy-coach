@@ -22,7 +22,7 @@
 - Create: `tests/test_skill_discovery.py` — repository discovery, alias, natural-language triggers, and Git-ignore checks.
 - Create: `tests/behavior/invocation-profile-baseline.md` — RED evidence.
 - Create: `tests/behavior/invocation-profile-green.md` — GREEN evidence.
-- External physical copy: `F:\AIPro\Codex\skills\career-strategy-coach` — synchronized after repository verification; never committed.
+- External physical copy: `你的skill所在位置` — synchronized after repository verification; never committed.
 
 ### Task 1: Create an isolated worktree and capture RED behavior
 
@@ -36,7 +36,7 @@
 Run from the repository root:
 
 ```powershell
-git worktree add "F:\AIPro\Career Strategy Coach  职业战略教练\.worktrees\career-coach-invocation" -b codex/career-coach-invocation
+git worktree add "你的skill所在位置\.worktrees\career-coach-invocation" -b codex/career-coach-invocation
 ```
 
 Expected: the new worktree is based on `master`, and both worktrees are clean.
@@ -336,7 +336,7 @@ git commit -m "test: verify career coach shortcut behavior"
 ### Task 5: Safely synchronize the F-drive installation
 
 **Files:**
-- External update: `F:\AIPro\Codex\skills\career-strategy-coach`
+- External update: `你的skill所在位置`
 
 - [ ] **Step 1: Prove the current installation is unmodified**
 
@@ -363,9 +363,9 @@ ReparseEntries: 0
 Use a unique F-drive temporary directory. Verify:
 
 ```powershell
-py -3.11 F:\AIPro\Codex\skills\career-strategy-coach\scripts\career_workspace.py propose --root <F-temp-root> --name 2026职业规划
-py -3.11 F:\AIPro\Codex\skills\career-strategy-coach\scripts\career_workspace.py init --path <F-temp-root>\2026职业规划
-py -3.11 F:\AIPro\Codex\skills\career-strategy-coach\scripts\career_workspace.py validate --path <F-temp-root>\2026职业规划
+py -3.11 你的skill所在位置\scripts\career_workspace.py propose --root <F-temp-root> --name 2026职业规划
+py -3.11 你的skill所在位置\scripts\career_workspace.py init --path <F-temp-root>\2026职业规划
+py -3.11 你的skill所在位置\scripts\career_workspace.py validate --path <F-temp-root>\2026职业规划
 ```
 
 Expected: `propose` creates nothing, `init` creates exactly five root items, and `validate` succeeds. Verify exact boundaries and contents before deleting each known file and empty directory non-recursively.

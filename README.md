@@ -41,8 +41,10 @@ cd career-strategy-coach
 当前项目配置的默认档案根目录是：
 
 ```text
-F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles
+你的skill所在位置\career-profiles
 ```
+
+其中“你的skill所在位置”需要替换为该 Skill 在你电脑上的实际绝对路径。
 
 用户也可以明确指定其他绝对路径。默认路径只是提案，不代表写入授权。创建流程固定为：
 
@@ -71,7 +73,7 @@ cd .agents\skills\career-strategy-coach
 
 ```powershell
 py -3.11 scripts\career_workspace.py propose `
-  --root "F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles" `
+  --root "你的skill所在位置\career-profiles" `
   --name "职业档案-A"
 ```
 
@@ -79,14 +81,14 @@ py -3.11 scripts\career_workspace.py propose `
 
 ```powershell
 py -3.11 scripts\career_workspace.py init `
-  --path "F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A"
+  --path "你的skill所在位置\career-profiles\职业档案-A"
 ```
 
 校验已有档案：
 
 ```powershell
 py -3.11 scripts\career_workspace.py validate `
-  --path "F:\AIPro\Career Strategy Coach  职业战略教练\career-profiles\职业档案-A"
+  --path "你的skill所在位置\career-profiles\职业档案-A"
 ```
 
 脚本要求绝对路径，并拒绝与 Skill 目录重叠的目标、路径逃逸以及路径链中的符号链接或重解析点。
